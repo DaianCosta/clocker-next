@@ -2,7 +2,6 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import firebase from "../config/firabase";
 import Link from "next/link";
-
 import { Logo } from "../components";
 import {
   Container,
@@ -37,12 +36,13 @@ export default function Home() {
       try {
         const user = await firebase
           .auth()
-          .signInWithEmailAndPassword(values.email, values.password);
+          .createUserWithEmailAndPassword(values.email, values.password);
       } catch (error) {}
     },
     validationSchema,
     initialValues: {
       email: "",
+      username: "",
       password: "",
     },
   });
@@ -83,6 +83,24 @@ export default function Home() {
           )}
         </FormControl>
 
+        <FormControl id="username" p={4} isRequired>
+          <InputGroup size="lg">
+            <InputLeftAddon children="clocker.work" />
+            <Input
+              type="username"
+              value={values.username}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            ´
+          </InputGroup>
+          {touched.email && (
+            <FormHelperText textColor="#e74c3c">
+              {errors.username}
+            </FormHelperText>
+          )}
+        </FormControl>
+
         <Box p={4}>
           <Button
             colorScheme="blue"
@@ -90,10 +108,10 @@ export default function Home() {
             onClick={handleSubmit}
             isLoading={isSubmitting}
           >
-            Entrar
+            Cadastrar
           </Button>
         </Box>
-        <Link href="/signup">Ainda não tem uma conta? Cadastre-se</Link>
+        <Link href="/">Já possui uma conta? ACesse!</Link>
       </Box>
     </Container>
   );
