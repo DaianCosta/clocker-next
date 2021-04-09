@@ -1,8 +1,11 @@
 import * as yup from "yup";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useAuth } from "../components/Auth";
+import axios from "axios";
 import { useFormik } from "formik";
-import firebase from "../config/firabase";
 import Link from "next/link";
-import { Logo } from "../components";
+import { Logo } from "../components/Logo";
 import {
   Container,
   Box,
@@ -17,6 +20,13 @@ import {
 } from "@chakra-ui/react";
 
 export default function Home() {
+  const [auth, { signup }] = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    auth.user && router.push("/agenda");
+  }, [auth.user]);
+
   let validationSchema = yup.object().shape({
     email: yup.string().email("E-mail inválido").required("Obrigatório"),
     password: yup.string().required("Obrigatório"),
@@ -32,13 +42,7 @@ export default function Home() {
     handleBlur,
     isSubmitting,
   } = useFormik({
-    onSubmit: async (values, form) => {
-      try {
-        const user = await firebase
-          .auth()
-          .createUserWithEmailAndPassword(values.email, values.password);
-      } catch (error) {}
-    },
+    onSubmit: signup,
     validationSchema,
     initialValues: {
       email: "",
