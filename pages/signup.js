@@ -2,7 +2,6 @@ import * as yup from "yup";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "../components/Auth";
-import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
 import { Logo } from "../components/Logo";
